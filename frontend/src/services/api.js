@@ -2,10 +2,10 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
-  headers: { 'Content-Type': 'application/json' }
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 60000
 });
 
-// Attach JWT token to every request automatically
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -14,7 +14,6 @@ api.interceptors.request.use(config => {
   return config;
 });
 
-// Handle 401 responses (token expired)
 api.interceptors.response.use(
   response => response,
   error => {

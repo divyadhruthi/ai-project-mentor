@@ -7,14 +7,8 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://ai-project-mentor.vercel.app',
-    /\.vercel\.app$/
-  ],
-  credentials: true
-}));
+// Allow all origins in production for simplicity
+app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
@@ -26,26 +20,15 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/chat', require('./routes/chat'));
 
-// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'AI Project Mentor API is running' });
 });
 
 app.get('/', (req, res) => {
-  res.json({ message: 'AI Project Mentor API - use /api endpoints', status: 'running' });
+  res.json({ message: 'AI Project Mentor API', status: 'running' });
 });
 
 const PORT = parseInt(process.env.PORT) || 5000;
-
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.log(`Port ${PORT} is busy, trying ${PORT + 1}...`);
-    app.listen(PORT + 1, () => {
-      console.log(`Server running on port ${PORT + 1}`);
-    });
-  }
 });

@@ -19,7 +19,11 @@ export default function Signup() {
       await signup(name, email, password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Signup failed');
+      if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        setError('Server is waking up... please wait 30 seconds and try again.');
+      } else {
+        setError(err.response?.data?.message || 'Signup failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

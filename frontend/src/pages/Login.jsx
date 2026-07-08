@@ -18,7 +18,11 @@ export default function Login() {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        setError('Server is waking up... please wait 30 seconds and try again.');
+      } else {
+        setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }
