@@ -26,8 +26,13 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/chat', require('./routes/chat'));
 
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'AI Project Mentor API is running' });
+});
+
+app.get('/', (req, res) => {
+  res.json({ message: 'AI Project Mentor API - use /api endpoints', status: 'running' });
 });
 
 const PORT = parseInt(process.env.PORT) || 5000;
